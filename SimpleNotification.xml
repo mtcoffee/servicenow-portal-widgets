@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2022-05-15 12:26:49">
+<sp_widget action="INSERT_OR_UPDATE">
+<category>custom</category>
+<client_script><![CDATA[api.controller=function() {
+  /* widget controller */
+  var c = this;
+};]]></client_script>
+<controller_as>c</controller_as>
+<css/>
+<data_table>sp_instance</data_table>
+<demo_data/>
+<description>A simple notification on the to present to user if they are trying to access a particular resource they do not have access to.</description>
+<docs display_value=""/>
+<field_list/>
+<has_preview>false</has_preview>
+<id/>
+<internal>false</internal>
+<link><![CDATA[function link(scope, element, attrs, controller) {
+  
+}]]></link>
+<name>SimpleNotification</name>
+<option_schema/>
+<public>false</public>
+<roles/>
+<script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+
+//check if user has specific roles and trying to access known catalog items and then display message
+               
+var rec_sysid = $sp.getParameter("sys_id");
+if ((gs.hasRole('sn_customerservice.consumer')) && (rec_sysid == '3f1dd0320a0a0b99000a53f7604a2ef5')) {
+    data.message = gs.getMessage('Hey Consumer, you may been given a link for a resource you do not have access to. Please contact your rep.');
+} else if ((gs.hasRole('sn_customerservice.customer')) && (rec_sysid == '3f1dd0320a0a0b99000a53f7604a2ef5')) {
+    data.message = gs.getMessage('Remdinder B2B user, please do not share this link');
+}
+               
+})();]]></script>
+<servicenow>false</servicenow>
+<sys_class_name>sp_widget</sys_class_name>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2022-05-15 12:26:17</sys_created_on>
+<sys_id>0ab2b4681b27451012648515ec4bcb3f</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_name>SimpleNotification</sys_name>
+<sys_package display_value="Global" source="global">global</sys_package>
+<sys_policy/>
+<sys_scope display_value="Global">global</sys_scope>
+<sys_update_name>sp_widget_0ab2b4681b27451012648515ec4bcb3f</sys_update_name>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2022-05-15 12:26:17</sys_updated_on>
+<template><![CDATA[<h2 ng-if="data.message" >
+<div ng-if="::!data.recordFound" class="alert alert-info ng-binding ng-scope" style="">
+{{data.message}}
+</div>
+</h2>]]></template>
+</sp_widget>
+</unload>
