@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<unload unload_date="2022-05-15 12:17:39">
+<unload unload_date="2022-07-10 16:05:51">
 <sp_widget action="INSERT_OR_UPDATE">
 <category>custom</category>
 <client_script><![CDATA[api.controller=function() {  /* widget controller */  var c = this;};]]></client_script>
@@ -11,7 +11,7 @@
 <docs display_value=""/>
 <field_list/>
 <has_preview>true</has_preview>
-<id>snblog</id>
+<id>simplerssfeedwidget</id>
 <internal>false</internal>
 <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
 <name>SimpleRSSFeedWidget</name>
@@ -19,6 +19,13 @@
 <public>true</public>
 <roles/>
 <script><![CDATA[(function() {
+
+    //array for unexpected content
+    var unexpected = [{
+        "title": "Unexpected Feed Format",
+        "link": "https://validator.w3.org/feed/"
+    }];
+	
     try {
 
         var r = new sn_ws.RESTMessageV2();
@@ -35,17 +42,23 @@
 
         var helper = new XMLHelper(responseBody);
         var obj = helper.toObject();
-
+		
+        //parse feed and validate it contains data
         var channelItems = obj.channel.item;
         var items = obj.item;
-        if (channelItems !== null && channelItems !== '') {
+        if (channelItems !== null && channelItems !== '' && channelItems.length > 0) {
             data.items = channelItems;
-        } else if (items !== null && items !== '') {
+        } else if (items !== null && items !== '' && items.length > 0) {
             data.items = items;
+        } else {
+            data.items = unexpected;
         }
+
 
     } catch (ex) {
         var message = ex.getMessage();
+        data.title = 'Error, check RSS feed';
+		data.items = unexpected;
     }
 })();]]></script>
 <servicenow>false</servicenow>
@@ -53,14 +66,14 @@
 <sys_created_by>admin</sys_created_by>
 <sys_created_on>2020-11-01 20:01:19</sys_created_on>
 <sys_id>aba12ad0db5868505ad27a61399619fa</sys_id>
-<sys_mod_count>24</sys_mod_count>
+<sys_mod_count>48</sys_mod_count>
 <sys_name>SimpleRSSFeedWidget</sys_name>
 <sys_package display_value="Global" source="global">global</sys_package>
 <sys_policy/>
 <sys_scope display_value="Global">global</sys_scope>
 <sys_update_name>sp_widget_aba12ad0db5868505ad27a61399619fa</sys_update_name>
 <sys_updated_by>admin</sys_updated_by>
-<sys_updated_on>2022-05-15 12:17:08</sys_updated_on>
+<sys_updated_on>2022-07-10 16:03:49</sys_updated_on>
 <template><![CDATA[<div class="panel panel-primary" >
   <div class="panel-heading">
           <h2 class="h4 panel-title ng-binding">{{c.data.title}}</h2>
